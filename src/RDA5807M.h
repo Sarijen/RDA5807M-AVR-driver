@@ -1,0 +1,151 @@
+#include "util/delay.h"
+#include "util/twi.h"
+
+#include <stdint.h>
+#include <stdbool.h>
+
+// === === Register bit shifts === ===
+
+// Register 0x00 (READ)
+constexpr uint16_t REG_00H_CHIP_ID_SHIFT = 8;
+
+// Register 0x02 (WRITE)
+constexpr uint16_t REG_02H_ENABLE_SHIFT = 0;
+constexpr uint16_t REG_02H_RESET_SHIFT = 1;
+constexpr uint16_t REG_02H_NEW_METHOD_SHIFT = 2;
+constexpr uint16_t REG_02H_RDS_EN_SHIFT = 3;
+constexpr uint16_t REG_02H_CLK_MODE_SHIFT = 4;
+constexpr uint16_t REG_02H_SK_MODE_SHIFT = 7;
+constexpr uint16_t REG_02H_SEEK_SHIFT = 8;
+constexpr uint16_t REG_02H_SEEK_DIR_SHIFT = 9;
+constexpr uint16_t REG_02H_RCLK_MODE_SHIFT = 11;
+constexpr uint16_t REG_02H_BASS_BOOST_SHIFT = 12;
+constexpr uint16_t REG_02H_MONO_SHIFT = 13;
+constexpr uint16_t REG_02H_MUTE_SHIFT = 14;
+constexpr uint16_t REG_02H_AUDIO_OUTPUT_SHIFT = 15;
+
+// Register 0x03 (WRITE)
+constexpr uint16_t REG_03H_CHAN_SPACING_SHIFT = 0;
+constexpr uint16_t REG_03H_BAND_SELECT_SHIFT = 2;
+constexpr uint16_t REG_03H_TUNE_SHIFT = 4;
+constexpr uint16_t REG_03H_CHAN_SELECT_SHIFT = 6;
+
+// Register 0x04 (WRITE)
+constexpr uint16_t REG_04H_AFCD_SHIFT = 8;
+constexpr uint16_t REG_04H_SOFTMUTE_SHIFT = 9;
+constexpr uint16_t REG_04H_DE_EMPHASIS_SHIFT = 11;
+
+// Register 0x05 (WRITE)
+constexpr uint16_t REG_05H_VOLUME_SHIFT = 0;
+constexpr uint16_t REG_05H_SEEK_THRESHOLD_SHIFT = 12;
+constexpr uint16_t REG_05H_INTERRUPT_SHIFT = 15;
+
+// Register 0x06 (WRITE)
+// Not important
+
+// Register 0x0A (READ)
+constexpr uint16_t REG_0AH_CHAN_READ_SHIFT = 0;
+constexpr uint16_t REG_0AH_STEREO_SHIFT = 10;
+constexpr uint16_t REG_0AH_RDS_BLK_E_SHIFT = 11;
+constexpr uint16_t REG_0AH_RDS_SYNC_SHIFT = 12;
+constexpr uint16_t REG_0AH_SEEK_FAIL_SHIFT = 13;
+constexpr uint16_t REG_0AH_SEEK_DONE_SHIFT = 14;
+constexpr uint16_t REG_0AH_RDS_READY_SHIFT = 15;
+
+// Register 0x0B (READ)
+constexpr uint16_t REG_0BH_BLKB_ERR_SHIFT = 0;
+constexpr uint16_t REG_0BH_BLKA_ERR_SHIFT = 2;
+constexpr uint16_t REG_0BH_ABCD_E_SHIFT = 4;
+constexpr uint16_t REG_0BH_FM_READY_SHIFT = 7;
+constexpr uint16_t REG_0BH_IS_STATION_SHIFT = 8;
+constexpr uint16_t REG_0BH_RSSI_SHIFT = 9;
+
+
+// === === Register bit masks === ===
+// Register 0x02 (WRITE)
+constexpr uint16_t REG_02H_ENABLE_MASK = 0x01;
+constexpr uint16_t REG_02H_RESET_MASK = 0x01;
+constexpr uint16_t REG_02H_NEW_METHOD_MASK = 0x01;
+constexpr uint16_t REG_02H_RDS_EN_MASK = 0x01;
+constexpr uint16_t REG_02H_CLK_MODE_MASK = 0x07;
+constexpr uint16_t REG_02H_SK_MODE_MASK = 0x01;
+constexpr uint16_t REG_02H_SEEK_MASK = 0x01;
+constexpr uint16_t REG_02H_SEEK_DIR_MASK = 0x01;
+constexpr uint16_t REG_02H_RCLK_MODE_MASK = 0x01;
+constexpr uint16_t REG_02H_BASS_BOOST_MASK = 0x01;
+constexpr uint16_t REG_02H_MONO_MASK = 0x01;
+constexpr uint16_t REG_02H_MUTE_MASK = 0x01;
+constexpr uint16_t REG_02H_AUDIO_OUTPUT_MASK = 0x01;
+
+// Register 0x03 (WRITE)
+constexpr uint16_t REG_03H_CHAN_SPACING_MASK = 0x07;
+constexpr uint16_t REG_03H_BAND_SELECT_MASK = 0x07;
+constexpr uint16_t REG_03H_TUNE_MASK = 0x01;
+constexpr uint16_t REG_03H_CHAN_SELECT_MASK = 0x3FF;
+
+// Register 0x04 (WRITE)
+constexpr uint16_t REG_04H_AFCD_MASK = 0x01;
+constexpr uint16_t REG_04H_SOFTMUTE_MASK = 0x01;
+constexpr uint16_t REG_04H_DE_EMPHASIS_MASK = 0x01;
+
+// Register 0x05 (WRITE)
+constexpr uint16_t REG_05H_VOLUME_MASK = 0x0F;
+constexpr uint16_t REG_05H_SEEK_THRESHOLD_MASK = 0x0F;
+constexpr uint16_t REG_05H_INTERRUPT_MASK = 0x01;
+
+// Register 0x06 (WRITE)
+// Not important
+
+// Register 0x0A (READ)
+constexpr uint16_t REG_0AH_CHAN_READ_MASK = 0x3FF;
+constexpr uint16_t REG_0AH_STEREO_MASK = 0x01;
+constexpr uint16_t REG_0AH_RDS_BLK_E_MASK = 0x01;
+constexpr uint16_t REG_0AH_RDS_SYNC_MASK = 0x01;
+constexpr uint16_t REG_0AH_SEEK_FAIL_MASK = 0x01;
+constexpr uint16_t REG_0AH_SEEK_DONE_MASK = 0x01;
+constexpr uint16_t REG_0AH_RDS_READY_MASK = 0x01;
+
+// Register 0x0B (READ)
+constexpr uint16_t REG_0BH_BLKB_ERR_MASK = 0x03;
+constexpr uint16_t REG_0BH_BLKA_ERR_MASK = 0x03;
+constexpr uint16_t REG_0BH_ABCD_E_MASK = 0x01;
+constexpr uint16_t REG_0BH_FM_READY_MASK = 0x01;
+constexpr uint16_t REG_0BH_IS_STATION_MASK = 0x01;
+constexpr uint16_t REG_0BH_RSSI_MASK = 0x77;
+
+
+class RDA5807M {
+  public:
+    void init();
+
+    void tune_frequency(float frequency);
+
+    static constexpr float FM_MIN_FREQUENCY = 50.0f;
+    static constexpr float FM_MAX_FREQUENCY = 115.0f;
+
+  private:
+    void reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits);
+
+    void reg_write_direct(uint8_t reg_addr, uint16_t reg_value);
+
+    void twi_init();
+    void twi_start();
+    void twi_write(uint8_t data);
+    void twi_write(uint8_t* buf, uint8_t len);
+    void twi_read(uint8_t* buf, uint8_t len);
+    void twi_stop();
+
+
+    static constexpr uint8_t RDA5807M_WRITE_INCREMENT = (0x10) << 1 | TW_WRITE;
+    static constexpr uint8_t RDA5807M_READ_INCREMENT = (0x10) << 1 | TW_READ;
+
+    static constexpr uint8_t RDA5807M_WRITE_DIRECT = (0x11) << 1 | TW_WRITE;
+    static constexpr uint8_t RDA5807M_READ_DIRECT = (0x11) << 1 | TW_READ;
+
+    uint16_t reg_02H = 0x0000;
+    uint16_t reg_03H = 0x0000;
+    uint16_t reg_04H = 0x0A00;
+    uint16_t reg_05H = 0x8101;
+    uint16_t reg_06H = 0x0000;
+    uint16_t reg_07H = 0x8202;
+};
