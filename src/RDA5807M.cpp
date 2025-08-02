@@ -23,6 +23,12 @@ void RDA5807M::init() {
   reg_set_bits(&reg_02H, REG_02H_RESET_SHIFT, REG_02H_RESET_MASK, 0);
 
   reg_write_direct(0x02, reg_02H);
+  _delay_us(50);
+
+  // Bit 7 in Register 0x05 has to be 1, otherwise the audio will be very noisy
+  // There's no information about this in the Datasheet
+  reg_set_bits(&reg_05H, 7,    1,   1);
+  //                     SHIFT MASK VALUE
 }
 
 
