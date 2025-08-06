@@ -50,6 +50,17 @@ void RDA5807M::tune_frequency(float frequency) {
 }
 
 
+void RDA5807M::set_volume(uint8_t volume_level) {
+  if (volume_level > REG_05H_VOLUME_MASK) {
+    volume_level = REG_05H_VOLUME_MASK;
+  }
+
+  reg_set_bits(&reg_05H, REG_05H_VOLUME_SHIFT, REG_05H_VOLUME_MASK, volume_level);
+
+  reg_write_direct(0x05, reg_05H);
+}
+
+
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {
     bits = reg_mask;

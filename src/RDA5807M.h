@@ -112,6 +112,7 @@ class RDA5807M {
     void init();
 
     void tune_frequency(float frequency);
+    void set_volume(uint8_t volume_level);
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
     static constexpr float FM_MAX_FREQUENCY = 115.0f;
@@ -137,8 +138,8 @@ class RDA5807M {
 
     uint16_t reg_02H = 0x0000;
     uint16_t reg_03H = 0x0000;
-    uint16_t reg_04H = 0x0A00;
-    uint16_t reg_05H = 0x8101;
+    uint16_t reg_04H = 0x0000;
+    uint16_t reg_05H = 0x0000;
     uint16_t reg_06H = 0x0000;
-    uint16_t reg_07H = 0x8202;
+    uint16_t reg_07H = 0x0000;
 };
