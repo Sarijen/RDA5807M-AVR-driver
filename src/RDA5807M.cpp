@@ -60,6 +60,14 @@ void RDA5807M::set_volume(uint8_t volume_level) {
   reg_write_direct(0x05, reg_05H);
 }
 
+void RDA5807M::enable_mute(bool enabled) {
+  // False = Mute, True = Normal
+  enabled = !enabled;
+
+  reg_set_bits(&reg_02H, REG_02H_MUTE_SHIFT, REG_02H_RESET_MASK, enabled);
+  reg_write_direct(0x02, reg_02H);
+}
+
 
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {

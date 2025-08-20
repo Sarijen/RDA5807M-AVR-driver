@@ -113,6 +113,7 @@ class RDA5807M {
 
     void tune_frequency(float frequency);
     void set_volume(uint8_t volume_level);
+    void enable_mute(bool enabled);
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
     static constexpr float FM_MAX_FREQUENCY = 115.0f;
