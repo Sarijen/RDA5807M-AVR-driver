@@ -76,6 +76,12 @@ void RDA5807M::enable_softmute(bool enabled) {
 }
 
 
+void RDA5807M::enable_bass_boost(bool enabled) {
+  reg_set_bits(&reg_02H, REG_02H_BASS_BOOST_SHIFT, REG_02H_BASS_BOOST_MASK, enabled);
+  reg_write_direct(0x02, reg_02H);
+}
+
+
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {
     bits = reg_mask;

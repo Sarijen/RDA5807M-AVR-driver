@@ -115,9 +115,11 @@ class RDA5807M {
     void set_volume(uint8_t volume_level);
     void enable_mute(bool enabled);
     void enable_softmute(bool enabled);
+    void enable_bass_boost(bool enabled);
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
     static constexpr float FM_MAX_FREQUENCY = 115.0f;
+
 
   private:
     void reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits);
