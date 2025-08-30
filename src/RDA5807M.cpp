@@ -92,6 +92,17 @@ void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask
 }
 
 
+void RDA5807M::reg_get_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t* buf) {
+  uint16_t new_bits;
+  
+  new_bits = *reg >> reg_shift; // Discard bits from right
+  new_bits &= reg_mask; // Discard bits from left
+  
+  // Only bits left are those we want, so we're done
+  *buf = new_bits;
+}
+
+
 void RDA5807M::reg_write_direct(uint8_t reg_addr, uint16_t reg_value) {
 
   uint8_t buffer[3] = {
@@ -104,6 +115,22 @@ void RDA5807M::reg_write_direct(uint8_t reg_addr, uint16_t reg_value) {
   twi_write(RDA5807M_WRITE_DIRECT);
   twi_write(buffer, 3);
   twi_stop();
+}
+
+
+void RDA5807M::reg_read_direct(uint8_t reg_addr, uint16_t* buf) {
+  uint8_t temp_buf[2];
+
+  twi_start();
+  twi_write(RDA5807M_WRITE_DIRECT);
+  twi_write(reg_addr); // Select the register we want to read
+
+  twi_start(); // Repeated start without STOP
+  twi_write(RDA5807M_READ_DIRECT);
+  twi_read(temp_buf, 2);
+  twi_stop();
+
+  *buf = (temp_buf[0] << 8) | (temp_buf[1]);
 }
 
 
