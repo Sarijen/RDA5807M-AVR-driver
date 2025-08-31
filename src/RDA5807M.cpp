@@ -82,6 +82,17 @@ void RDA5807M::enable_bass_boost(bool enabled) {
 }
 
 
+bool RDA5807M::is_station(void) {
+  uint16_t temp_reg;
+  uint16_t is_station;
+
+  reg_read_direct(0x0B, &temp_reg);
+  reg_get_bits(&temp_reg, REG_0BH_IS_STATION_SHIFT, REG_0BH_IS_STATION_MASK, &is_station);
+
+  return (bool)is_station;
+}
+
+
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {
     bits = reg_mask;

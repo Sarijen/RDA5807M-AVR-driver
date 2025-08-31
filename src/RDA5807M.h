@@ -117,6 +117,9 @@ class RDA5807M {
     void enable_softmute(bool enabled);
     void enable_bass_boost(bool enabled);
 
+    bool is_station(void);
+
+
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
     static constexpr float FM_MAX_FREQUENCY = 115.0f;
 
