@@ -93,6 +93,17 @@ bool RDA5807M::is_station(void) {
 }
 
 
+uint8_t RDA5807M::get_raw_rssi(void) {
+  uint16_t temp_reg;
+  uint16_t raw_rssi_value;
+
+  reg_read_direct(0x0B, &temp_reg);
+  reg_get_bits(&temp_reg, REG_0BH_RSSI_SHIFT, REG_0BH_RSSI_MASK, &raw_rssi_value);
+
+  return raw_rssi_value;
+}
+
+
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {
     bits = reg_mask;

@@ -118,6 +118,7 @@ class RDA5807M {
     void enable_bass_boost(bool enabled);
 
     bool is_station(void);
+    uint8_t get_raw_rssi(void);
 
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
