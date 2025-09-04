@@ -104,6 +104,21 @@ uint8_t RDA5807M::get_raw_rssi(void) {
 }
 
 
+float RDA5807M::get_frequency(void) {
+  uint16_t temp_reg;
+  uint16_t channel;
+  float frequency;
+
+  reg_read_direct(0x0A, &temp_reg);
+  reg_get_bits(&temp_reg, REG_0AH_CHAN_READ_SHIFT, REG_0AH_CHAN_READ_MASK, &channel);
+
+  constexpr float FM_BAND_START = 87.0f;
+  frequency = (static_cast<float>(channel) / 10.0f) + FM_BAND_START;
+
+  return frequency;
+}
+
+
 void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
   if (bits > reg_mask) {
     bits = reg_mask;
