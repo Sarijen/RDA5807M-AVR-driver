@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#pragma once
+
 
 // === === Register bit SHIFTS === ===
 
