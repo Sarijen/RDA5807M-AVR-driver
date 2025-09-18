@@ -87,7 +87,7 @@ bool RDA5807M::is_station(void) {
   uint16_t is_station;
 
   reg_read_direct(0x0B, &temp_reg);
-  reg_get_bits(&temp_reg, REG_0BH_IS_STATION_SHIFT, REG_0BH_IS_STATION_MASK, &is_station);
+  reg_get_bits(temp_reg, REG_0BH_IS_STATION_SHIFT, REG_0BH_IS_STATION_MASK, &is_station);
 
   return (bool)is_station;
 }
@@ -98,7 +98,7 @@ uint8_t RDA5807M::get_raw_rssi(void) {
   uint16_t raw_rssi_value;
 
   reg_read_direct(0x0B, &temp_reg);
-  reg_get_bits(&temp_reg, REG_0BH_RSSI_SHIFT, REG_0BH_RSSI_MASK, &raw_rssi_value);
+  reg_get_bits(temp_reg, REG_0BH_RSSI_SHIFT, REG_0BH_RSSI_MASK, &raw_rssi_value);
 
   return raw_rssi_value;
 }
@@ -110,7 +110,7 @@ float RDA5807M::get_frequency(void) {
   float frequency;
 
   reg_read_direct(0x0A, &temp_reg);
-  reg_get_bits(&temp_reg, REG_0AH_CHAN_READ_SHIFT, REG_0AH_CHAN_READ_MASK, &channel);
+  reg_get_bits(temp_reg, REG_0AH_CHAN_READ_SHIFT, REG_0AH_CHAN_READ_MASK, &channel);
 
   constexpr float FM_BAND_START = 87.0f;
   frequency = (static_cast<float>(channel) / 10.0f) + FM_BAND_START;
@@ -129,10 +129,10 @@ void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask
 }
 
 
-void RDA5807M::reg_get_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t* buf) {
+void RDA5807M::reg_get_bits(uint16_t reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t* buf) {
   uint16_t new_bits;
   
-  new_bits = *reg >> reg_shift; // Discard bits from right
+  new_bits = reg >> reg_shift; // Discard bits from right
   new_bits &= reg_mask; // Discard bits from left
   
   // Only bits left are those we want, so we're done
