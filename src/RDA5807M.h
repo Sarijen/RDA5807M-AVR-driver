@@ -113,7 +113,7 @@ class RDA5807M {
   public:
     void init();
 
-    void tune_frequency(float frequency);
+    void tune_frequency(uint16_t frequency_mhz);
     void set_volume(uint8_t volume_level);
     void enable_mute(bool enabled);
     void enable_softmute(bool enabled);
@@ -126,6 +126,73 @@ class RDA5807M {
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;
     static constexpr float FM_MAX_FREQUENCY = 115.0f;
+
+    typedef struct {
+      uint8_t reg_bits;
+      uint16_t value_khz;
+    } chan_spacing_t;
+
+    typedef struct {
+      uint8_t reg_bits;
+      uint16_t frq_start;
+      uint16_t frq_end;
+    } fm_band_t;
+
+
+    const fm_band_t band_us_europe = {
+      .reg_bits = 0x00,
+      .frq_start = 870,
+      .frq_end = 1080,
+    };
+
+    const fm_band_t band_japan = {
+      .reg_bits = 0x01,
+      .frq_start = 870,
+      .frq_end = 1080,
+    };
+
+    const fm_band_t band_world = {
+      .reg_bits = 0x02,
+      .frq_start = 870,
+      .frq_end = 1080,
+    };
+
+    const fm_band_t east_europe = {
+      .reg_bits = 0x03,
+      .frq_start = 650,
+      .frq_end = 760,
+    };
+
+    const fm_band_t east_europe_alt = {
+      .reg_bits = 0x03,
+      .frq_start = 50,
+      .frq_end = 650,
+    };
+
+    const fm_band_t* current_band_start = &band_us_europe;
+
+
+    const chan_spacing_t chan_spacing_100 = {
+      .reg_bits = 0x00,
+      .value_khz = 100,
+    };
+
+    const chan_spacing_t chan_spacing_200 = {
+      .reg_bits = 0x01,
+      .value_khz = 200,
+    };
+
+    const chan_spacing_t chan_spacing_50 = {
+      .reg_bits = 0x02,
+      .value_khz = 50,
+    };
+
+    const chan_spacing_t chan_spacing_25 = {
+      .reg_bits = 0x03,
+      .value_khz = 25,
+    };
+
+    const chan_spacing_t* current_chan_spacing = &chan_spacing_100;
 
 
   private:

@@ -32,20 +32,32 @@ void RDA5807M::init() {
 }
 
 
-void RDA5807M::tune_frequency(float frequency) {
-  if (frequency > FM_MAX_FREQUENCY) {
-    frequency = FM_MAX_FREQUENCY;
-  } else if (frequency < FM_MIN_FREQUENCY) {
-    frequency = FM_MIN_FREQUENCY;
+/*
+  Frequency represented as (uint16_t * 10) instead of float
+  For example to tune 105.5MHz, pass 1055
+*/
+void RDA5807M::tune_frequency(uint16_t frequency_mhz) {
+  uint16_t band_start_mhz = current_band_start->frq_start;
+  uint16_t band_end_mhz = current_band_start->frq_end;
+  uint16_t chan_spacing_khz = current_chan_spacing->value_khz;
+
+  if (frequency_mhz > band_end_mhz) {
+    frequency_mhz = band_end_mhz;
+  } else if (frequency_mhz < band_start_mhz) {
+    frequency_mhz = band_start_mhz;
   }
 
-  constexpr float FM_BAND_START = 87.0f;
-  uint16_t channel = static_cast<uint16_t>((frequency - FM_BAND_START) * 10);
-  reg_set_bits(&reg_03H, REG_03H_CHAN_SELECT_SHIFT, REG_03H_CHAN_SELECT_MASK, channel);
+  uint16_t channel_number = ((frequency_mhz - band_start_mhz) * chan_spacing_khz);
+  channel_number /= 100; 
 
+  reg_set_bits(&reg_03H, REG_03H_CHAN_SELECT_SHIFT, REG_03H_CHAN_SELECT_MASK, channel_number);
+
+
+  // Tune to apply the frequency by setting TUNE bit
   constexpr uint8_t ENABLE_TUNE = 1;
   reg_set_bits(&reg_03H, REG_03H_TUNE_SHIFT, REG_03H_TUNE_MASK, ENABLE_TUNE);
 
+  // Write the new values into the IC
   reg_write_direct(0x03, reg_03H);
 }
 
