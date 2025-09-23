@@ -121,7 +121,7 @@ class RDA5807M {
 
     bool is_station(void);
     uint8_t get_raw_rssi(void);
-    float get_frequency(void);
+    uint16_t get_frequency(void);
 
 
     static constexpr float FM_MIN_FREQUENCY = 50.0f;

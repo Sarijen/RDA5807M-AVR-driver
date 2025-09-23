@@ -48,6 +48,7 @@ void RDA5807M::tune_frequency(uint16_t frequency_mhz) {
   }
 
   uint16_t channel_number = ((frequency_mhz - band_start_mhz) * chan_spacing_khz);
+  // Dividing by 100 to convert chan spacing kHz to MHz*10
   channel_number /= 100; 
 
   reg_set_bits(&reg_03H, REG_03H_CHAN_SELECT_SHIFT, REG_03H_CHAN_SELECT_MASK, channel_number);
@@ -115,17 +116,23 @@ uint8_t RDA5807M::get_raw_rssi(void) {
   return raw_rssi_value;
 }
 
-
-float RDA5807M::get_frequency(void) {
+/*
+  Frequency represented as (uint16_t * 10) instead of float
+  For example tuned 105.5MHz, it would return 1055
+*/
+uint16_t RDA5807M::get_frequency(void) {
   uint16_t temp_reg;
-  uint16_t channel;
-  float frequency;
+  uint16_t channel_number;
+  uint16_t frequency_mhz;
 
   reg_read_direct(0x0A, &temp_reg);
-  reg_get_bits(temp_reg, REG_0AH_CHAN_READ_SHIFT, REG_0AH_CHAN_READ_MASK, &channel);
+  reg_get_bits(temp_reg, REG_0AH_CHAN_READ_SHIFT, REG_0AH_CHAN_READ_MASK, &channel_number);
 
-  constexpr float FM_BAND_START = 87.0f;
-  frequency = (static_cast<float>(channel) / 10.0f) + FM_BAND_START;
+  uint16_t chan_spacing_khz = current_chan_spacing->value_khz;
+  uint16_t band_start_mhz = current_band_start->frq_start;
+
+  // Dividing by 100 to convert kHz to MHz*10
+  frequency_mhz = (chan_spacing_khz * channel_number) / 100 + band_start_mhz;
 
   return frequency;
 }
