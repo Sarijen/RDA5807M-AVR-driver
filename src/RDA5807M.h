@@ -196,8 +196,8 @@ class RDA5807M {
 
 
   private:
-    void reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits);
-    void reg_get_bits(uint16_t reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t* buf);
+    void reg_set_bits(uint16_t* reg, uint16_t bit_shift, uint16_t bit_mask, uint16_t bits);
+    void reg_get_bits(uint16_t reg, uint16_t bit_shift, uint16_t bit_mask, uint16_t* buf);
 
     void reg_write_direct(uint8_t reg_addr, uint16_t reg_value);
     void reg_read_direct(uint8_t reg_addr, uint16_t* buf);

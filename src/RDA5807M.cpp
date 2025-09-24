@@ -134,25 +134,25 @@ uint16_t RDA5807M::get_frequency(void) {
   // Dividing by 100 to convert kHz to MHz*10
   frequency_mhz = (chan_spacing_khz * channel_number) / 100 + band_start_mhz;
 
-  return frequency;
+  return frequency_mhz;
 }
 
 
-void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t bits) {
-  if (bits > reg_mask) {
-    bits = reg_mask;
+void RDA5807M::reg_set_bits(uint16_t* reg, uint16_t bit_shift, uint16_t bit_mask, uint16_t bits) {
+  if (bits > bit_mask) {
+    bits = bit_mask;
   }
 
-  *reg &= ~(reg_mask << reg_shift); // Clear bits
-  *reg |= (bits << reg_shift); // Write new bits
+  *reg &= ~(bit_mask << bit_shift); // Clear bits
+  *reg |= (bits << bit_shift); // Write new bits
 }
 
 
-void RDA5807M::reg_get_bits(uint16_t reg, uint16_t reg_shift, uint16_t reg_mask, uint16_t* buf) {
+void RDA5807M::reg_get_bits(uint16_t reg, uint16_t bit_shift, uint16_t bit_mask, uint16_t* buf) {
   uint16_t new_bits;
   
-  new_bits = reg >> reg_shift; // Discard bits from right
-  new_bits &= reg_mask; // Discard bits from left
+  new_bits = reg >> bit_shift; // Discard bits from right
+  new_bits &= bit_mask; // Discard bits from left
   
   // Only bits left are those we want, so we're done
   *buf = new_bits;
