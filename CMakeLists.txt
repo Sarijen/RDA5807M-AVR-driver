@@ -9,7 +9,7 @@ set(CMAKE_CXX_COMPILER ${AVR_GCC_PATH}/avr-g++)
 set(CMAKE_OBJCOPY ${AVR_GCC_PATH}/avr-objcopy)
 set(CMAKE_CXX_FLAGS "-mmcu=${MCU} -DF_CPU=8000000UL -Os")
 
-add_library(RDA5807M STATIC src/RDA5807.c)
+add_library(RDA5807M STATIC src/RDA5807M.cpp)
 
 target_include_directories(
   RDA5807M PUBLIC
