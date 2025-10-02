@@ -40,6 +40,14 @@ constexpr uint16_t REG_05H_VOLUME_SHIFT = 0;
 constexpr uint16_t REG_05H_SNR_THRESHOLD_SHIFT = 7;
 constexpr uint16_t REG_05H_INTERRUPT_SHIFT = 15;
 
+// Register 0x07 (WRITE)
+constexpr uint16_t REG_07H_FREQ_MODE_SHIFT = 0;
+constexpr uint16_t REG_07H_SOFTBLEND_SHIFT = 1;
+constexpr uint16_t REG_07H_SEEK_MODE_SHIFT = 2;
+constexpr uint16_t REG_07H_65M_50M_MODE_SHIFT = 9;
+constexpr uint16_t REG_07H_SOFTBLEND_TRESHOLD_SHIFT = 10;
+
+
 // Register 0x0A (READ)
 constexpr uint16_t REG_0AH_CHAN_READ_SHIFT = 0;
 constexpr uint16_t REG_0AH_STEREO_SHIFT = 10;
@@ -91,6 +99,13 @@ constexpr uint16_t REG_05H_VOLUME_MASK = 0x0F;
 constexpr uint16_t REG_05H_SNR_THRESHOLD_MASK = 0x0F;
 constexpr uint16_t REG_05H_INTERRUPT_MASK = 0x01;
 
+// Register 0x07 (WRITE)
+constexpr uint16_t REG_07H_FREQ_MODE = 0x01;
+constexpr uint16_t REG_07H_SOFTBLEND_MASK = 0x01;
+constexpr uint16_t REG_07H_SEEK_MODE_MASK = 0x06;
+constexpr uint16_t REG_07H_65M_50M_MODE_MASK = 0x01;
+constexpr uint16_t REG_07H_SOFTBLEND_TRESHOLD_MASK = 0x05;
+
 // Register 0x0A (READ)
 constexpr uint16_t REG_0AH_CHAN_READ_MASK = 0x3FF;
 constexpr uint16_t REG_0AH_STEREO_MASK = 0x01;
@@ -109,6 +124,7 @@ constexpr uint16_t REG_0BH_IS_STATION_MASK = 0x01;
 constexpr uint16_t REG_0BH_RSSI_MASK = 0x77;
 
 
+
 class RDA5807M {
   public:
     void init();
@@ -118,6 +134,7 @@ class RDA5807M {
     void enable_mute(bool enabled);
     void enable_softmute(bool enabled);
     void enable_bass_boost(bool enabled);
+    void enable_softblend(bool enabled);
 
     bool is_station(void);
     uint8_t get_raw_rssi(void);

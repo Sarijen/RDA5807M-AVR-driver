@@ -95,6 +95,12 @@ void RDA5807M::enable_bass_boost(bool enabled) {
 }
 
 
+void RDA5807M::enable_softblend(bool enabled) {
+  reg_set_bits(&reg_07H, REG_07H_SOFTBLEND_SHIFT, REG_07H_SOFTBLEND_MASK, enabled);
+  reg_write_direct(0x07, reg_07H);
+}
+
+
 bool RDA5807M::is_station(void) {
   uint16_t temp_reg;
   uint16_t is_station;
