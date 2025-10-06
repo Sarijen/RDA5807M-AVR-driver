@@ -7,6 +7,9 @@
 #pragma once
 
 
+constexpr uint8_t FM_DEEMPHASIS_50US = 50;
+constexpr uint8_t FM_DEEMPHASIS_75US = 75;
+
 // === === Register bit SHIFTS === ===
 
 // Register 0x02
@@ -124,7 +127,6 @@ constexpr uint16_t REG_0BH_IS_STATION_MASK = 0x01;
 constexpr uint16_t REG_0BH_RSSI_MASK = 0x77;
 
 
-
 class RDA5807M {
   public:
     void init();
@@ -135,6 +137,7 @@ class RDA5807M {
     void enable_softmute(bool enabled);
     void enable_bass_boost(bool enabled);
     void enable_softblend(bool enabled);
+    void set_deemphasis(uint8_t de_emphasis);
 
     bool is_station(void);
     uint8_t get_raw_rssi(void);

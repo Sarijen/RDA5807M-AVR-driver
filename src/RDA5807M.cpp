@@ -101,6 +101,17 @@ void RDA5807M::enable_softblend(bool enabled) {
 }
 
 
+void RDA5807M::set_deemphasis(uint8_t de_emphasis) {
+  if (de_emphasis != 50 && de_emphasis != 75) {
+    return;
+  }
+
+  reg_set_bits(&reg_04H, REG_04H_DE_EMPHASIS_SHIFT, REG_04H_DE_EMPHASIS_MASK, de_emphasis);
+
+  reg_write_direct(0x04, reg_04H);
+}
+
+
 bool RDA5807M::is_station(void) {
   uint16_t temp_reg;
   uint16_t is_station;
