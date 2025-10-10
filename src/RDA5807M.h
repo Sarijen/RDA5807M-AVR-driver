@@ -19,7 +19,7 @@ constexpr uint16_t REG_02H_NEW_METHOD_SHIFT = 2;
 constexpr uint16_t REG_02H_RDS_EN_SHIFT = 3;
 constexpr uint16_t REG_02H_CLK_MODE_SHIFT = 4;
 constexpr uint16_t REG_02H_SK_MODE_SHIFT = 7;
-constexpr uint16_t REG_02H_SEEK_SHIFT = 8;
+constexpr uint16_t REG_02H_SEEK_EN_SHIFT = 8;
 constexpr uint16_t REG_02H_SEEK_DIR_SHIFT = 9;
 constexpr uint16_t REG_02H_RCLK_MODE_SHIFT = 11;
 constexpr uint16_t REG_02H_BASS_BOOST_SHIFT = 12;
@@ -78,7 +78,7 @@ constexpr uint16_t REG_02H_NEW_METHOD_MASK = 0x01;
 constexpr uint16_t REG_02H_RDS_EN_MASK = 0x01;
 constexpr uint16_t REG_02H_CLK_MODE_MASK = 0x07;
 constexpr uint16_t REG_02H_SK_MODE_MASK = 0x01;
-constexpr uint16_t REG_02H_SEEK_MASK = 0x01;
+constexpr uint16_t REG_02H_SEEK_EN_MASK = 0x01;
 constexpr uint16_t REG_02H_SEEK_DIR_MASK = 0x01;
 constexpr uint16_t REG_02H_RCLK_MODE_MASK = 0x01;
 constexpr uint16_t REG_02H_BASS_BOOST_MASK = 0x01;
@@ -138,6 +138,7 @@ class RDA5807M {
     void enable_bass_boost(bool enabled);
     void enable_softblend(bool enabled);
     void set_deemphasis(uint8_t de_emphasis);
+    void seek(bool enable, bool direction, bool enable_wrapping);
 
     bool is_station(void);
     uint8_t get_raw_rssi(void);

@@ -112,6 +112,20 @@ void RDA5807M::set_deemphasis(uint8_t de_emphasis) {
 }
 
 
+void RDA5807M::seek(bool enable, bool direction, bool enable_wrapping) {
+  // Enable/Disable seeking
+  reg_set_bits(&reg_02H, REG_02H_SEEK_EN_SHIFT, REG_02H_SEEK_EN_MASK, enable);
+
+  // Set seeking direction (1 = UP, 0 = DOWN)
+  reg_set_bits(&reg_02H, REG_02H_SEEK_DIR_SHIFT, REG_02H_SEEK_DIR_MASK, direction);
+
+  // Enable/Disable wrapping on band end
+  reg_set_bits(&reg_02H, REG_02H_SK_MODE_SHIFT, REG_02H_SK_MODE_MASK, enable_wrapping);
+
+  reg_write_direct(0x02, reg_02H);
+}
+
+
 bool RDA5807M::is_station(void) {
   uint16_t temp_reg;
   uint16_t is_station;
