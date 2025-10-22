@@ -40,7 +40,7 @@ constexpr uint16_t REG_04H_DE_EMPHASIS_SHIFT = 11;
 
 // Register 0x05
 constexpr uint16_t REG_05H_VOLUME_SHIFT = 0;
-constexpr uint16_t REG_05H_SNR_THRESHOLD_SHIFT = 7;
+constexpr uint16_t REG_05H_SNR_THRESHOLD_SHIFT = 8;
 constexpr uint16_t REG_05H_INTERRUPT_SHIFT = 15;
 
 // Register 0x07 (WRITE)
