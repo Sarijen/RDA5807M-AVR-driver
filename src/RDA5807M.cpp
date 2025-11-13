@@ -101,6 +101,12 @@ void RDA5807M::enable_softblend(bool enabled) {
 }
 
 
+void RDA5807M::enable_mono(bool enabled) {
+  reg_set_bits(&reg_02H, REG_02H_MONO_SHIFT, REG_02H_MONO_MASK, enabled);
+  reg_write_direct(0x02, reg_02H);
+}
+
+
 void RDA5807M::set_deemphasis(uint8_t de_emphasis) {
   if (de_emphasis != 50 && de_emphasis != 75) {
     return;
@@ -134,6 +140,17 @@ bool RDA5807M::is_station(void) {
   reg_get_bits(temp_reg, REG_0BH_IS_STATION_SHIFT, REG_0BH_IS_STATION_MASK, &is_station);
 
   return (bool)is_station;
+}
+
+
+bool RDA5807M::is_mono(void) {
+  uint16_t temp_reg;
+  uint16_t is_stereo;
+
+  reg_read_direct(0x0A, &temp_reg);
+  reg_get_bits(temp_reg, REG_0AH_STEREO_SHIFT, REG_0AH_STEREO_MASK, &is_stereo);
+
+  return (bool)is_stereo;
 }
 
 

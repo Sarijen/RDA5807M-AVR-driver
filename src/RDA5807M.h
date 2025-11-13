@@ -137,10 +137,12 @@ class RDA5807M {
     void enable_softmute(bool enabled);
     void enable_bass_boost(bool enabled);
     void enable_softblend(bool enabled);
+    void enable_mono(bool enabled);
     void set_deemphasis(uint8_t de_emphasis);
     void seek(bool enable, bool direction, bool enable_wrapping);
 
     bool is_station(void);
+    bool is_mono(void);
     uint8_t get_raw_rssi(void);
     uint16_t get_frequency(void);
 
