@@ -130,6 +130,7 @@ constexpr uint16_t REG_0BH_RSSI_MASK = 0x77;
 class RDA5807M {
   public:
     void init();
+    void reset();
 
     void tune_frequency(uint16_t frequency_mhz);
     void set_volume(uint8_t volume_level);

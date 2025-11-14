@@ -32,6 +32,21 @@ void RDA5807M::init() {
 }
 
 
+void RDA5807M::reset() {
+
+  // Assert reset
+  reg_set_bits(&reg_02H, REG_02H_RESET_SHIFT, REG_02H_RESET_SHIFT, 1);
+  reg_write_direct(0x02, reg_02H);
+
+  _delay_us(50);
+
+  // Deassert reset
+  reg_set_bits(&reg_02H, REG_02H_RESET_SHIFT, REG_02H_RESET_SHIFT, 0);
+  reg_write_direct(0x02, reg_02H);
+
+}
+
+
 /*
   Frequency represented as (uint16_t * 10) instead of float
   For example to tune 105.5MHz, pass 1055
