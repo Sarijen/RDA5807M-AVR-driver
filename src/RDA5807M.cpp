@@ -133,6 +133,14 @@ void RDA5807M::set_deemphasis(uint8_t de_emphasis) {
 }
 
 
+void RDA5807M::set_band(fm_band_t new_band) {
+  current_band_start = &new_band;
+
+  reg_set_bits(&reg_03H, REG_03H_BAND_SELECT_SHIFT, REG_03H_BAND_SELECT_MASK, new_band.reg_bits);
+  reg_write_direct(0x03, reg_03H);
+}
+
+
 void RDA5807M::seek(bool enable, bool direction, bool enable_wrapping) {
   // Enable/Disable seeking
   reg_set_bits(&reg_02H, REG_02H_SEEK_EN_SHIFT, REG_02H_SEEK_EN_MASK, enable);

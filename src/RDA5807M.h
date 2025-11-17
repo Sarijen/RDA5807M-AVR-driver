@@ -129,40 +129,19 @@ constexpr uint16_t REG_0BH_RSSI_MASK = 0x77;
 
 class RDA5807M {
   public:
-    void init();
-    void reset();
-
-    void tune_frequency(uint16_t frequency_mhz);
-    void set_volume(uint8_t volume_level);
-    void enable_mute(bool enabled);
-    void enable_softmute(bool enabled);
-    void enable_bass_boost(bool enabled);
-    void enable_softblend(bool enabled);
-    void enable_mono(bool enabled);
-    void set_deemphasis(uint8_t de_emphasis);
-    void seek(bool enable, bool direction, bool enable_wrapping);
-
-    bool is_station(void);
-    bool is_mono(void);
-    uint8_t get_raw_rssi(void);
-    uint16_t get_frequency(void);
-
-
-    static constexpr float FM_MIN_FREQUENCY = 50.0f;
-    static constexpr float FM_MAX_FREQUENCY = 115.0f;
-
-    typedef struct {
-      uint8_t reg_bits;
-      uint16_t value_khz;
-    } chan_spacing_t;
-
     typedef struct {
       uint8_t reg_bits;
       uint16_t frq_start;
       uint16_t frq_end;
     } fm_band_t;
 
+    typedef struct {
+      uint8_t reg_bits;
+      uint16_t value_khz;
+    } chan_spacing_t;
 
+
+    // BANDS DEF
     const fm_band_t band_us_europe = {
       .reg_bits = 0x00,
       .frq_start = 870,
@@ -196,6 +175,7 @@ class RDA5807M {
     const fm_band_t* current_band_start = &band_us_europe;
 
 
+    // CHAN SPACING DEF
     const chan_spacing_t chan_spacing_100 = {
       .reg_bits = 0x00,
       .value_khz = 100,
@@ -217,6 +197,31 @@ class RDA5807M {
     };
 
     const chan_spacing_t* current_chan_spacing = &chan_spacing_100;
+
+    
+    void init();
+    void reset();
+
+    void tune_frequency(uint16_t frequency_mhz);
+    void set_volume(uint8_t volume_level);
+    void enable_mute(bool enabled);
+    void enable_softmute(bool enabled);
+    void enable_bass_boost(bool enabled);
+    void enable_softblend(bool enabled);
+    void enable_mono(bool enabled);
+    void set_deemphasis(uint8_t de_emphasis);
+    void set_band(fm_band_t new_band);
+    void seek(bool enable, bool direction, bool enable_wrapping);
+
+    bool is_station(void);
+    bool is_mono(void);
+    uint8_t get_raw_rssi(void);
+    uint16_t get_frequency(void);
+
+
+    static constexpr float FM_MIN_FREQUENCY = 50.0f;
+    static constexpr float FM_MAX_FREQUENCY = 115.0f;
+
 
 
   private:
