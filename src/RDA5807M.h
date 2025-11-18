@@ -211,6 +211,7 @@ class RDA5807M {
     void enable_mono(bool enabled);
     void set_deemphasis(uint8_t de_emphasis);
     void set_band(fm_band_t new_band);
+    void set_chan_spacing(chan_spacing_t new_chan_spacing);
     void seek(bool enable, bool direction, bool enable_wrapping);
 
     bool is_station(void);

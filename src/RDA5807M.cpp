@@ -141,6 +141,14 @@ void RDA5807M::set_band(fm_band_t new_band) {
 }
 
 
+void RDA5807M::set_chan_spacing(chan_spacing_t new_chan_spacing) {
+  current_chan_spacing = &new_chan_spacing;
+
+  reg_set_bits(&reg_03H, REG_03H_CHAN_SPACING_SHIFT, REG_03H_CHAN_SPACING_MASK, new_chan_spacing.value_khz);
+  reg_write_direct(0x03, reg_03H);
+}
+
+
 void RDA5807M::seek(bool enable, bool direction, bool enable_wrapping) {
   // Enable/Disable seeking
   reg_set_bits(&reg_02H, REG_02H_SEEK_EN_SHIFT, REG_02H_SEEK_EN_MASK, enable);
