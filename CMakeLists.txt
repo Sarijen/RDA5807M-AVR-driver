@@ -15,19 +15,27 @@ set(CMAKE_OBJCOPY ${AVR_GCC_PATH}/avr-objcopy)
 add_definitions(-DF_CPU=${F_CPU})
 set(CMAKE_EXE_LINKER_FLAGS -mmcu=${MCU})
 
+
 add_compile_options(
   -mmcu=${MCU}
   -Os
-  -Wall
-  -Wundef
-  -Werror
-  -Wfatal-errors
-  -Wl,--relax
   -fshort-enums
   -fdata-sections
   -fno-split-wide-types
   -fno-tree-scev-cprop
+  -Wl,--relax
 )
+
+option(ENABLE_DEBUG "Enables compiler warnings" OFF)
+
+if (ENABLE_DEBUG)
+  add_compile_options(
+    -Wall
+    -Wundef
+    -Werror
+    -Wfatal-errors
+  )
+endif()
 
 add_library(RDA5807M STATIC src/RDA5807M.cpp)
 
