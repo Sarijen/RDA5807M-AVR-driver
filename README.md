@@ -15,10 +15,22 @@
 | ROUT     | Right Audio Output |
 | FMIN     | Antenna circuitry  |
 
-# Building
+# Building (CMake)
 - This library uses [AVR-LibC](https://github.com/avrdudes/avr-libc), make sure you have it and its dependencies installed and set correctly.
 
-#### TO-DO
+
+1. `git clone` this repo inside your project
+2. modify your CMakeLists.txt 
+
+    add the library directory using
+    ``` 
+    add_subdirectory(RDA5807M-AVR-driver)
+    ```
+    add `RDA5807M` keyword to target_link_libraries  
+
+
 
 # Usage
-#### TO-DO
+1. include the header `#include "RDA5807M.h"`
+2. Create an instance of `RDA5807M`, no constructor
+3. Call `init()`
